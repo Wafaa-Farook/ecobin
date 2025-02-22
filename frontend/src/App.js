@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React from "react";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import theme from "./theme";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard"; // We'll create this next
@@ -7,6 +10,8 @@ import CarbonCalculator from "./pages/CarbonCalculator";
 import RecyclingLocator from "./pages/RecyclingLocator";
 function App() {
   return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
     <Router>
 
       <Routes>
@@ -18,6 +23,7 @@ function App() {
         <Route path="/recycling-locator" element={<RecyclingLocator />} />
       </Routes>
     </Router>
+    </ThemeProvider>
   );
 }
 

@@ -106,3 +106,4 @@ const CarbonCalculator = () => {
 };
 
 export default CarbonCalculator;
+

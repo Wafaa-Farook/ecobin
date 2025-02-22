@@ -10,74 +10,105 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/login"); // Redirect to login page after logout
+      navigate("/login");
     } catch (error) {
       console.error("Logout Error:", error);
     }
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#F5F5F5", minHeight: "100vh" }}>
       {/* Navbar */}
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            EcoBin Dashboard
+      <AppBar position="static" sx={{ background: "linear-gradient(to right, #2F7A34FF, #388E3C)", padding: "10px 0" }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h5" fontWeight="bold">
+            
           </Typography>
-          <Typography variant="h6" style={{ marginRight: "20px" }}>
-            Score: 0 {/* TODO: Replace with dynamic score */}
-          </Typography>
-          <Button color="inherit" onClick={handleLogout}>
-            Logout
-          </Button>
+          <div>
+            <Typography variant="h6" display="inline" sx={{ marginRight: "20px" }}>
+              Score: 0 {/* Replace with actual score */}
+            </Typography>
+            <Button color="secondary" variant="contained" sx={{ borderRadius: "20px" }} onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
 
-      {/* Dashboard Content */}
-      <Container style={{ marginTop: "20px" }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5">Upload & Sort Waste</Typography>
-                <Typography variant="body2">Use AI to classify waste items.</Typography>
-                <Button variant="contained" color="primary" fullWidth onClick={() => navigate("/waste-sort")}>
-                  Go to Waste Sort
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
+      {/* Header Section with Image */}
+      {/* Header Section with Image */}
+<div
+  style={{
+    background: `url('https://skiphirecomparison.co.uk/wp-content/uploads/2023/07/hand-children-holding-young-plant-with-sunlight-on-green-nature-background-concept-eco-earth-day-stockpack-adobe-stock-scaled.jpg') center/cover no-repeat`,
+    height: "250px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+    color: "#fff",
+  }}
+>
+  {/* Dark overlay for better text visibility */}
+  <div
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark overlay effect
+    }}
+  ></div>
 
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5">Carbon Footprint Calculator</Typography>
-                <Typography variant="body2">Estimate your carbon footprint.</Typography>
-                <Button variant="contained" color="secondary" fullWidth onClick={() => navigate("/carbon-calculator")}>
-                  Go to Calculator
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
+  <Typography variant="h2" fontWeight="bold" zIndex={1}>
+    EcoBin
+  </Typography>
+</div>
 
-          <Grid item xs={12} sm={6} md={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5">Recycling Centers Locator</Typography>
-                <Typography variant="body2">Find nearby recycling centers.</Typography>
-                <Button
-                  variant="contained"
-                  color="success"
-                  fullWidth
-                  onClick={() => navigate("/recycling-locator")}
-                >
-                  Find Centers
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
+
+      {/* Services Section */}
+      <Container sx={{ marginTop: "40px" }}>
+        <Typography variant="h4" fontWeight="bold" textAlign="center" color="primary" gutterBottom>
+            Cleaner Choices for a Brighter Planet
+        </Typography>
+
+        <Grid container spacing={4} justifyContent="center">
+          {[
+            { title: "♻️ Upload & Sort Waste", description: "Use AI to classify waste items.", path: "/waste-sort" },
+            { title: "🌍 Carbon Calculator", description: "Estimate your carbon footprint.", path: "/carbon-calculator" },
+            { title: "📍 Recycling Centers", description: "Find nearby recycling centers.", path: "/recycling-locator" },
+          ].map((service, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card
+                sx={{
+                  background: "#fff",
+                  borderRadius: "15px",
+                  boxShadow: 4,
+                  textAlign: "center",
+                  padding: "20px",
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h5" fontWeight="bold">
+                    {service.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ marginBottom: "10px" }}>
+                    {service.description}
+                  </Typography>
+                  <Button variant="contained" color="primary" fullWidth onClick={() => navigate(service.path)}>
+                    
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
       </Container>
+
+      {/* Footer */}
+      <div style={{ backgroundColor: "#1B5E20", padding: "20px", marginTop: "40px", color: "#fff", textAlign: "center" }}>
+        <Typography variant="h6">EcoBin © {new Date().getFullYear()} - All Rights Reserved</Typography>
+      </div>
     </div>
   );
 };

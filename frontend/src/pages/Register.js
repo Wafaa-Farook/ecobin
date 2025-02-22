@@ -1,32 +1,63 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword, auth } from "../firebase";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { signUpWithEmail, signInWithGoogle } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { TextField, Button, Container, Typography } from "@mui/material";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleSignUp = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard"); // Redirect to Dashboard after registration
+      await signUpWithEmail(email, password);
+      navigate("/dashboard"); // Redirect after sign-up
     } catch (error) {
-      alert("Registration failed: " + error.message);
+      alert("Sign-Up Failed: " + error.message);
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      await signInWithGoogle();
+      navigate("/dashboard"); // Redirect after Google sign-up
+    } catch (error) {
+      alert("Google Sign-Up Failed: " + error.message);
     }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 5, p: 3, boxShadow: 3, borderRadius: 2 }}>
-        <Typography variant="h5" align="center">Create Account</Typography>
-        <TextField fullWidth label="Email" margin="normal" onChange={(e) => setEmail(e.target.value)} />
-        <TextField fullWidth label="Password" type="password" margin="normal" onChange={(e) => setPassword(e.target.value)} />
-        <Button fullWidth variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleRegister}>
-          Register
-        </Button>
-      </Box>
+    <Container maxWidth="sm" style={{ textAlign: "center", marginTop: "50px" }}>
+      <Typography variant="h4">Register</Typography>
+
+      <TextField
+        fullWidth
+        margin="normal"
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <TextField
+        fullWidth
+        margin="normal"
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <Button fullWidth variant="contained" color="primary" onClick={handleSignUp}>
+        Register
+      </Button>
+
+      <Button fullWidth variant="contained" color="secondary" onClick={handleGoogleSignUp} style={{ marginTop: "10px" }}>
+        Sign up with Google
+      </Button>
+
+      <Typography variant="body2" style={{ marginTop: "10px" }}>
+        Already have an account? <a href="/login">Login here</a>
+      </Typography>
     </Container>
   );
 }

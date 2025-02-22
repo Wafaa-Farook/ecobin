@@ -1,9 +1,20 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Container, Grid, Card, CardContent } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login"); // Redirect to login page after logout
+    } catch (error) {
+      console.error("Logout Error:", error);
+    }
+  };
 
   return (
     <div>
@@ -16,7 +27,7 @@ const Dashboard = () => {
           <Typography variant="h6" style={{ marginRight: "20px" }}>
             Score: 0 {/* TODO: Replace with dynamic score */}
           </Typography>
-          <Button color="inherit" onClick={() => navigate("/login")}>
+          <Button color="inherit" onClick={handleLogout}>
             Logout
           </Button>
         </Toolbar>
@@ -55,14 +66,13 @@ const Dashboard = () => {
                 <Typography variant="h5">Recycling Centers Locator</Typography>
                 <Typography variant="body2">Find nearby recycling centers.</Typography>
                 <Button
-                    variant="contained"
-                    color="success"
-                    fullWidth
-                    onClick={() => navigate("/recycling-locator")}
-                    >
-                    Find Centers
+                  variant="contained"
+                  color="success"
+                  fullWidth
+                  onClick={() => navigate("/recycling-locator")}
+                >
+                  Find Centers
                 </Button>
-
               </CardContent>
             </Card>
           </Grid>

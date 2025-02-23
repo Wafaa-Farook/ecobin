@@ -1,62 +1,111 @@
+// Import Firebase modules
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword
+} from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
+// Firebase config for EcoBin
 const firebaseConfig = {
-  apiKey: "AIzaSyDaFcKzVf7nvUAynIZD8G-zlXrSb3GAq5o",
-  authDomain: "ecobin-663eb.firebaseapp.com",
-  projectId: "ecobin-663eb",
-  storageBucket: "ecobin-663eb.appspot.com",
-  messagingSenderId: "213169606754",
-  appId: "1:213169606754:web:fcc3fcb5edd16c644f013b"
+  apiKey: "AIzaSyBNfRXgqf603JARhiFBDNvKtpN4GNmTq88",
+  authDomain: "ecobin-40c34.firebaseapp.com",
+  projectId: "ecobin-40c34",
+  storageBucket: "ecobin-40c34.firebasestorage.app",
+  messagingSenderId: "215367277242",
+  appId: "1:215367277242:web:8a76c01fc7b1a9a4b2c083",
+  measurementId: "G-2S52L18ZLM"
 };
 
-// 🔹 Initialize Firebase
+
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-// 🔹 Function to Sign Up with Email
-const signUpWithEmail = async (email, password, fullName, phoneNumber, username) => {
+// 🔹 Sign up with email
+const signUpWithEmail = async (email, password, username, phoneNumber) => {
   try {
-    const userRef = doc(db, "users", email);
-    const userSnap = await getDoc(userRef);
-
-    if (userSnap.exists()) {
-      throw new Error("User already exists! Redirecting to login...");
-    }
-
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
+    const userRef = doc(db, "users", user.uid);
     await setDoc(userRef, {
-      fullName,
+      username,
       email,
       phoneNumber,
-      username,
       createdAt: new Date()
     });
 
     return user;
   } catch (error) {
+    console.error("Error signing up:", error.message);
     throw error;
   }
 };
 
-// 🔹 Function to Sign In with Email
+// 🔹 Login with email
 const loginWithEmail = async (email, password) => {
   try {
-    const userRef = doc(db, "users", email);
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error("Error logging in with email:", error.message);
+    throw error;
+  }
+};
+
+// 🔹 Google login
+const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) {
-      throw new Error("User not found! Redirecting to Register...");
+      await setDoc(userRef, {
+        username: user.displayName,
+        email: user.email,
+        phoneNumber: "",
+        createdAt: new Date()
+      });
     }
 
-    return await signInWithEmailAndPassword(auth, email, password);
+    return user;
   } catch (error) {
+    console.error("Google login failed:", error.message);
     throw error;
   }
 };
 
-export { app, auth, db, signUpWithEmail, loginWithEmail };
+const signUpWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider); // This opens the Google popup
+    const user = result.user;
+
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        username: user.displayName,
+        email: user.email,
+        phoneNumber: user.phoneNumber || "",
+        createdAt: new Date()
+      });
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Google signup failed:", error); // Log the full error
+    throw error;
+  }
+};
+
+export { app, auth, db, signUpWithEmail, loginWithEmail, loginWithGoogle, signUpWithGoogle };

@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Container, Typography, Paper } from "@mui/material";
+import { Button, CircularProgress, Container, Paper, Typography } from "@mui/material";
 import * as tmImage from "@teachablemachine/image";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -13,8 +13,9 @@ const WasteSort = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState(null);
 
-  const modelURL = "http://localhost:5000/model/model.json";
-  const metadataURL = "http://localhost:5000/model/metadata.json";
+  const modelURL = "https://ecobin-m1pl.onrender.com/model/model.json";
+
+  const metadataURL = "https://ecobin-m1pl.onrender.com/model/metadata.json";
 
   useEffect(() => {
     const loadModel = async () => {

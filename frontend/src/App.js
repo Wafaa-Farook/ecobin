@@ -8,7 +8,6 @@ import Dashboard from "./pages/Dashboard"; // We'll create this next
 import WasteSort from "./pages/WasteSort";
 import CarbonCalculator from "./pages/CarbonCalculator";
 import RecyclingLocator from "./pages/RecyclingLocator";
-import Leaderboard from "./pages/Leaderboard.js";
 import EcoTips from './pages/EcoTips';
 function App() {
   return (
@@ -23,7 +22,6 @@ function App() {
         <Route path="/waste-sort" element={<WasteSort />} />
         <Route path="/carbon-calculator" element={<CarbonCalculator />} />
         <Route path="/recycling-locator" element={<RecyclingLocator />} />
-        <Route path="/Leaderboard" element={<Leaderboard />} />
         <Route path="/eco-tips" element={<EcoTips />} />
       </Routes>
     </Router>

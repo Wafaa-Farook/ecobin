@@ -1,3 +1,4 @@
+require("dotenv").config();
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 global.fetch = fetch;
 
@@ -11,6 +12,7 @@ const tf = require("@tensorflow/tfjs-node");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+console.log("Firebase API Key:", process.env.FIREBASE_API_KEY);
 
 // Middleware
 app.use(cors());

@@ -95,7 +95,7 @@ Replace the Firebase configuration object in your firebase.js file with your pro
 - Allow location access or input your city manually.
 - Get directions to the nearest recycling facility.
 
-4.Read Eco Tips
+4. Read Eco Tips
 - Check out the Eco Tips section for daily green living advice.
 
 ## Contributing

@@ -23,7 +23,7 @@ const Dashboard = () => {
       {/* Navbar */}
       <AppBar position="static" sx={{ background: "linear-gradient(to right, #2F7A34FF, #388E3C)", padding: "10px 0" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h5" fontWeight="bold"></Typography>
+          <Typography variant="h5" fontWeight="bold">EcoBin</Typography>
           <Button color="secondary" variant="contained" sx={{ borderRadius: "20px" }} onClick={handleLogout}>
             Logout
           </Button>
@@ -91,7 +91,7 @@ const Dashboard = () => {
                 padding: "20px",
                 cursor: "pointer",
                 transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-                minWidth: "265cd px", // Fixed box width
+                minWidth: "265cdpx", // Fixed box width
                 maxWidth: "350px",
                 height: "200px", // Ensures same height
                 display: "flex",

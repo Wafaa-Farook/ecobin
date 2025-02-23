@@ -6,6 +6,8 @@ import {
   TextField,
   Grid,
   Paper,
+  Box,
+  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
@@ -97,64 +99,102 @@ const CarbonCalculator = () => {
     setScore(total.toFixed(2));
     setChartData(categories);
 
-    if (total < 10) setLevel("Safe Level");
-    else if (total < 20) setLevel("Moderate Level");
-    else setLevel("Unsafe Level");
+    if (total < 10) setLevel("✅ Safe Level");
+    else if (total < 20) setLevel("⚠️ Moderate Level");
+    else setLevel("❌ Unsafe Level");
   };
 
   const renderSuggestions = () => {
-    if (level === "Safe Level")
-      return "✅ Great job! Keep maintaining your eco-friendly habits.";
-    if (level === "Moderate Level")
-      return "⚠️ You can reduce your carbon footprint by using public transport more and minimizing electricity usage.";
-    return "❌ Consider cutting down on high energy usage and reducing waste to lower your footprint.";
+    if (level === "✅ Safe Level")
+      return "🌱 Great job! Keep maintaining your eco-friendly habits.";
+    if (level === "⚠️ Moderate Level")
+      return "🚴 You can reduce your footprint by using public transport and minimizing electricity usage.";
+    return "⚡ Consider cutting down on high energy usage and reducing waste to lower your footprint.";
   };
 
   return (
-    <Container>
-      <Typography variant="h4" style={{ marginTop: "20px" }}>
-        Carbon Footprint Calculator
-      </Typography>
-      <Typography>
-        Enter your daily activities to estimate your carbon footprint.
-      </Typography>
-
-      <Grid container direction="column" spacing={2} style={{ marginTop: "20px" }}>
-  {Object.keys(inputs).map((key) => (
-    <Grid item key={key}>
-      <Typography variant="subtitle1" style={{ marginBottom: "5px" }}>
-        {key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}
-      </Typography>
-      <TextField
-        name={key}
-        type="number"
-        value={inputs[key]}
-        onChange={handleChange}
-        size="small" // Makes the input box smaller
-        style={{ width: "50%" }} // Reduces width to 50%
-      />
-    </Grid>
-  ))}
-</Grid>
-
-      {/* Calculate Button */}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={calculateFootprint}
-        style={{ marginTop: "20px" }}
+    <Container maxWidth="md" style={{ marginTop: "30px" }}>
+      {/* Title Section */}
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        style={{
+          fontWeight: "bold",
+          color: "#1B5E20",
+        }}
       >
-        Calculate
-      </Button>
+        🌍 Carbon Footprint Calculator
+      </Typography>
+      <Typography align="center" color="textSecondary" style={{ marginBottom: "30px" }}>
+        Enter your daily activities and discover your environmental impact.
+      </Typography>
 
-      {/* Result Display */}
+      {/* Input Section */}
+      <Paper
+        elevation={3}
+        style={{
+          padding: "30px",
+          background: "linear-gradient(to right, #e8f5e9, #ffffff)",
+          borderRadius: "15px",
+        }}
+      >
+        <Grid container spacing={2}>
+          {Object.keys(inputs).map((key) => (
+            <Grid item xs={12} sm={6} key={key}>
+              <TextField
+                fullWidth
+                label={key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}
+                name={key}
+                type="number"
+                value={inputs[key]}
+                onChange={handleChange}
+                size="small"
+                variant="outlined"
+              />
+            </Grid>
+          ))}
+        </Grid>
+
+        <Box display="flex" justifyContent="center" mt={3}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={calculateFootprint}
+            style={{
+              padding: "10px 25px",
+              fontWeight: "bold",
+              fontSize: "16px",
+              borderRadius: "25px",
+            }}
+          >
+            Calculate 
+          </Button>
+        </Box>
+      </Paper>
+
+      {/* Results Section */}
       {score && (
-        <Paper style={{ padding: "20px", marginTop: "20px" }}>
-          <Typography variant="h6">
-            🌍 Total Carbon Footprint: {score} kg CO₂e
+        <Paper
+          elevation={4}
+          style={{
+            marginTop: "30px",
+            padding: "30px",
+            background: "linear-gradient(to right, #f1f8e9, #ffffff)",
+            borderRadius: "15px",
+          }}
+        >
+          <Typography variant="h5" align="center" style={{ color: "#2E7D32" }}>
+             Total Carbon Footprint: {score} kg CO₂e
           </Typography>
-          <Typography variant="subtitle1">📊 Level: {level}</Typography>
-          <Typography>{renderSuggestions()}</Typography>
+          <Typography variant="h6" align="center" style={{ marginTop: "10px" }}>
+            {level}
+          </Typography>
+          <Typography align="center" color="textSecondary" style={{ marginTop: "10px" }}>
+            {renderSuggestions()}
+          </Typography>
+
+          <Divider style={{ margin: "20px 0" }} />
 
           {/* Pie Chart */}
           <ResponsiveContainer width="100%" height={400}>
@@ -182,15 +222,22 @@ const CarbonCalculator = () => {
         </Paper>
       )}
 
-      {/* Back to Dashboard Button */}
-      <Button
-        variant="contained"
-        color="secondary"
-        style={{ marginTop: "20px" }}
-        onClick={() => navigate("/dashboard")}
-      >
-        Back to Dashboard
-      </Button>
+      {/* Navigation Button */}
+      <Box display="flex" justifyContent="center" mt={4}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => navigate("/dashboard")}
+          style={{
+            padding: "10px 25px",
+            fontWeight: "bold",
+            fontSize: "16px",
+            borderRadius: "25px",
+          }}
+        >
+          Back to Dashboard 
+        </Button>
+      </Box>
     </Container>
   );
 };

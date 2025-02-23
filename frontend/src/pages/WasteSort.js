@@ -1,23 +1,17 @@
-import { Button, CircularProgress, Container, Typography } from "@mui/material";
+import { Button, CircularProgress, Container, Typography, Paper } from "@mui/material";
 import * as tmImage from "@teachablemachine/image";
-import { getAuth } from "firebase/auth";
-import { getUserScore, updateUserScore, getLeaderboard } from "../services/pointsService";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Webcam from "react-webcam";
 
 const WasteSort = () => {
-  const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const webcamRef = useRef(null);
   const [model, setModel] = useState(null);
   const [prediction, setPrediction] = useState("");
   const [guidelines, setGuidelines] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingPrediction, setLoadingPrediction] = useState(false);
+  const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState(null);
-  const [useWebcam, setUseWebcam] = useState(false);
 
   const modelURL = "http://localhost:5000/model/model.json";
   const metadataURL = "http://localhost:5000/model/metadata.json";
@@ -28,7 +22,6 @@ const WasteSort = () => {
         const loadedModel = await tmImage.load(modelURL, metadataURL);
         setModel(loadedModel);
         setLoading(false);
-        console.log("✅ Model loaded successfully!");
       } catch (error) {
         console.error("❌ Error loading model:", error);
         setLoading(false);
@@ -38,40 +31,33 @@ const WasteSort = () => {
     loadModel();
   }, []);
 
-  const handleFileChange = async (event) => {
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (!file) return;
-    processImage(file);
+    setImage(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
-  const captureImage = async () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    if (imageSrc) {
-      setImagePreview(imageSrc);
-      processImage(imageSrc, true);
+  const handleUpload = async () => {
+    if (!image) {
+      setError("⚠️ No image to upload. Please select an image.");
+      return;
     }
-  };
 
-  const processImage = async (image, isBase64 = false) => {
     setPrediction("");
     setGuidelines("");
     setError(null);
     setLoadingPrediction(true);
-    
+
     const formData = new FormData();
-    if (isBase64) {
-      const blob = await fetch(image).then((res) => res.blob());
-      formData.append("image", blob);
-    } else {
-      formData.append("image", image);
-    }
+    formData.append("image", image);
 
     try {
       const response = await fetch("http://localhost:5000/api/predict", {
         method: "POST",
         body: formData,
       });
-      
+
       const data = await response.json();
       setLoadingPrediction(false);
 
@@ -88,97 +74,164 @@ const WasteSort = () => {
   };
 
   return (
-    <Container style={{ textAlign: "center", marginTop: "50px" }}>
-      <Typography variant="h4">🗑️ Waste Sorting AI</Typography>
-      <Typography style={{ marginBottom: "20px" }}>
-        Upload or capture an image of waste to get sorting advice.
+    <Container
+      style={{
+        textAlign: "center",
+        marginTop: "50px",
+        fontFamily: "'Poppins', sans-serif",
+      }}
+    >
+      <Typography
+        variant="h3"
+        style={{
+          fontWeight: "bold",
+          marginBottom: "10px",
+          color: "#1B5E20",
+        }}
+      >
+        ♻️ WasteSort AI
+      </Typography>
+      <Typography
+        variant="h6"
+        style={{ color: "#555", marginBottom: "30px" }}
+      >
+        Upload an image of waste and get eco-friendly disposal advice.
       </Typography>
 
       {loading ? (
         <CircularProgress />
       ) : (
-        <>
-          <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "20px" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => fileInputRef.current.click()}
-            >
-              Upload Image
-            </Button>
+        <Paper
+          elevation={6}
+          style={{
+            padding: "30px",
+            backgroundColor: "#f7fdfc",
+            borderRadius: "20px",
+            display: "inline-block",
+            maxWidth: "600px",
+            width: "100%",
+          }}
+        >
+          <div style={{
+  background: "#e8f5e9",
+  padding: "30px",
+  borderRadius: "20px",
+  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.05)",
+  maxWidth: "400px",
+  margin: "auto"
+}}>
+          <Button
+  variant="contained"
+  style={{
+    background: "linear-gradient(to right, #1B5E20, #4CAF50)", // Dark green gradient
+    border: "1px solid #1B5E20",
+    padding: "12px 24px",
+    borderRadius: "25px", // Rounded edges
+    color: "white",
+    fontWeight: "bold",
+    fontSize: "16px",
+    textTransform: "none",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" // Optional subtle shadow
+  }}
+  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+>
+  Upload an Image
+</Button>
 
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => setUseWebcam(!useWebcam)}
-            >
-              {useWebcam ? "Use File Upload" : "Use Webcam"}
-            </Button>
-          </div>
-
-          {useWebcam ? (
-            <>
-              <Webcam
-                ref={webcamRef}
-                screenshotFormat="image/png"
-                style={{ width: "100%", maxWidth: "400px", borderRadius: "10px" }}
-              />
-              <Button
-                variant="contained"
-                color="success"
-                style={{ marginTop: "10px" }}
-                onClick={captureImage}
-              >
-                Capture Image
-              </Button>
-            </>
-          ) : (
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-            />
-          )}
-
-          {loadingPrediction && <CircularProgress style={{ marginTop: "20px" }} />}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
 
           {imagePreview && (
             <div style={{ marginTop: "20px" }}>
               <img
                 src={imagePreview}
                 alt="Uploaded Waste"
-                style={{ width: "200px", borderRadius: "10px" }}
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  objectFit: "cover",
+                  borderRadius: "15px",
+                  border: "2px solid #4CAF50",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                }}
               />
             </div>
           )}
 
+<Button
+  variant="contained"
+  style={{
+    background: "linear-gradient(to right, #1B5E20, #4CAF50)",
+    border: "1px solid #1B5E20",
+    padding: "12px 24px",
+    borderRadius: "25px",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: "16px",
+    textTransform: "none",
+    marginTop: "20px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+  }}
+  onClick={handleUpload}
+  disabled={!image}
+>
+  Predict Waste Category
+</Button>
+
+          </div>
+          {loadingPrediction && (
+            <CircularProgress style={{ marginTop: "20px" }} />
+          )}
+
           {prediction && (
-            <Typography variant="h6" style={{ marginTop: "20px", color: "#4CAF50", fontWeight: "bold" }}>
-              Predicted Category: {prediction}
+            <Typography
+              variant="h5"
+              style={{
+                marginTop: "20px",
+                color: "#1B5E20",
+                fontWeight: "bold",
+              }}
+            >
+              ✅ Predicted Category: {prediction}
             </Typography>
           )}
 
-          {guidelines ? (
+          {guidelines && (
             <Typography
               variant="body1"
-              style={{ marginTop: "20px", backgroundColor: "#f0f4f8", padding: "15px", borderRadius: "10px", textAlign: "left", whiteSpace: "pre-line" }}
+              style={{
+                marginTop: "20px",
+                backgroundColor: "#E8F5E9",
+                padding: "15px",
+                borderRadius: "10px",
+                textAlign: "left",
+                whiteSpace: "pre-line",
+                fontFamily: "'Poppins', sans-serif",
+              }}
             >
               {guidelines}
-            </Typography>
-          ) : prediction && (
-            <Typography variant="body1" style={{ marginTop: "20px", color: "#FF5722" }}>
-              ⚠️ No guidelines available for this category.
             </Typography>
           )}
 
           {error && (
-            <Typography color="error" style={{ marginTop: "20px" }}>
+            <Typography
+              color="error"
+              style={{
+                marginTop: "20px",
+                backgroundColor: "#FFEBEE",
+                padding: "10px",
+                borderRadius: "10px",
+              }}
+            >
               {error}
             </Typography>
           )}
-        </>
+        </Paper>
       )}
     </Container>
   );

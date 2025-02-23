@@ -9,11 +9,12 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
+import { Container, TextField, Button, Paper, Typography } from "@mui/material";
 
-// Custom marker icon for clarity
+// Custom marker icon
 const customIcon = new L.Icon({
   iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-  iconSize: [30, 30],
+  iconSize: [35, 35],
 });
 
 const RecyclingLocator = () => {
@@ -58,7 +59,7 @@ const RecyclingLocator = () => {
 
   // Search location
   const searchLocation = async () => {
-    if (!search) return alert("Enter a location!");
+    if (!search) return alert("⚠️ Please enter a location!");
 
     try {
       const res = await axios.get(
@@ -73,7 +74,7 @@ const RecyclingLocator = () => {
         setPosition([lat, lon]);
         fetchCenters(lat, lon);
       } else {
-        alert("Location not found!");
+        alert("❌ Location not found!");
       }
     } catch (error) {
       console.error("Error searching location:", error);
@@ -91,19 +92,77 @@ const RecyclingLocator = () => {
   }, []);
 
   return (
-    <div>
-      <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
-        <input
-          type="text"
-          placeholder="Enter location..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button onClick={searchLocation}>Search</button>
-      </div>
+    <Container
+      style={{
+        textAlign: "center",
+        marginTop: "30px",
+        background: "linear-gradient(to right, #E8F5E9, #C8E6C9)",
+        padding: "40px",
+        borderRadius: "20px",
+        boxShadow: "0 8px 20px rgba(76, 175, 80, 0.2)",
+      }}
+    >
+      <Typography
+        variant="h3"
+        style={{
+          fontFamily: "'Poppins', sans-serif",
+          fontWeight: "bold",
+          color: "#1B5E20",
+          marginBottom: "20px",
+        }}
+      >
+        Find Recycling Centers Near You
+      </Typography>
+
+      <Paper
+  elevation={3}
+  style={{
+    padding: "20px",
+    borderRadius: "15px",
+    backgroundColor: "#A5D6A7",
+    display: "inline-block",
+  }}
+>
+  <TextField
+    label="Search location..."
+    variant="outlined"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    style={{
+      backgroundColor: "white",
+      borderRadius: "8px",
+      marginBottom: "10px",
+      width: "300px", // Shortened width
+    }}
+  />
+  <Button
+    variant="contained"
+    style={{
+      background: "linear-gradient(to right, #1B5E20, #4CAF50)",
+      color: "white",
+      padding: "10px 20px",
+      fontWeight: "bold",
+      textTransform: "none",
+      borderRadius: "25px",
+      marginLeft: "10px",
+    }}
+    onClick={searchLocation}
+  >
+     Search
+  </Button>
+</Paper>
 
       {/* Map Container */}
-      <MapContainer center={position} zoom={12} style={{ height: "80vh", width: "100%" }}>
+      <MapContainer
+        center={position}
+        zoom={12}
+        style={{
+          height: "70vh",
+          width: "100%",
+          borderRadius: "15px",
+          boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <ChangeMapView coords={position} />
         <TileLayer
           attribution="© OpenStreetMap contributors"
@@ -111,11 +170,26 @@ const RecyclingLocator = () => {
         />
         {centers.map((center, idx) => (
           <Marker key={idx} position={center.coordinates} icon={customIcon}>
-            <Popup>{center.name}</Popup>
+            <Popup>
+              <Typography variant="body1" style={{ fontWeight: "bold" }}>
+                {center.name}
+              </Typography>
+            </Popup>
           </Marker>
         ))}
       </MapContainer>
-    </div>
+
+      <Typography
+        style={{
+          marginTop: "30px",
+          color: "#388E3C",
+          fontStyle: "italic",
+          fontFamily: "'Poppins', sans-serif",
+        }}
+      >
+        ♻️ Let’s work together for a cleaner, greener planet!
+      </Typography>
+    </Container>
   );
 };
 

@@ -21,9 +21,9 @@ Additionally, the Recycling Locator leverages OpenStreetMap integration to help 
 It calculates carbon footprint in kilograms of CO₂ equivalent (CO₂e) and visualizes your emissions with a pie chart.
 EcoBin provides tailored suggestions to reduce your carbon output.
 Categorizes your footprint level into:
-Safe Level: Minimal environmental impact.
-Moderate Level: Some adjustments recommended.
-Unsafe Level: Consider significant changes.
+**Safe Level: Minimal environmental impact.
+**Moderate Level: Some adjustments recommended.
+**Unsafe Level: Consider significant changes.
 - **Recycling Locator :** Find nearby recycling centers effortlessly using integrated map functionality powered by OpenStreetMap.
 - **Eco Tips:** Receive helpful, easy-to-implement tips for sustainable living.Daily eco-friendly habits and advice on reducing plastic, conserving water, and minimizing energy consumption.
 
@@ -32,21 +32,22 @@ Unsafe Level: Consider significant changes.
 1. Clone the Repository
 
 2. git clone https://github.com/anshidarinshii/ecobin.git
+```bash
 cd ecobin
 
 3. Install Dependencies
-
-4. Run the following commands in the project directory:
+ Run the following commands in the project directory:
+```bash
 npm install
-Backend Setup
 
-5. Navigate to the backend folder:
+6. Backend Setup
+ Navigate to the backend folder:
 cd backend
 npm install
 node server.js
-Frontend Setup
 
-6. In a new terminal window:
+7. Frontend Setup
+In a new terminal window:
 cd frontend
 npm install
 npm start
@@ -95,6 +96,12 @@ Replace the Firebase configuration object in your firebase.js file with your pro
 4. Push to the branch (git push origin feature/your-feature).
 5. Submit a Pull Request.
 
+
+## License
+
+This project is licensed under the MIT License.
+
+
 ## Contact
 
 If you have any questions or suggestions, feel free to reach out to the project maintainers:
@@ -105,9 +112,7 @@ anshidarinshii@gmail.com
 
 wafaafarook@gmail.com
 
-## License
 
-This project is licensed under the MIT License.
 
 
 

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { getUserScore, updateUserScore, getLeaderboard } from "../services/pointsService";
+
 import {
   Button,
   Container,

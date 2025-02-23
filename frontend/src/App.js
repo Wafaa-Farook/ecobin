@@ -8,9 +8,8 @@ import Dashboard from "./pages/Dashboard"; // We'll create this next
 import WasteSort from "./pages/WasteSort";
 import CarbonCalculator from "./pages/CarbonCalculator";
 import RecyclingLocator from "./pages/RecyclingLocator";
-import Points from "./pages/Points.js";
 import Leaderboard from "./pages/Leaderboard.js";
-import Gamification from "./pages/Gamification.js";
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -24,9 +23,7 @@ function App() {
         <Route path="/waste-sort" element={<WasteSort />} />
         <Route path="/carbon-calculator" element={<CarbonCalculator />} />
         <Route path="/recycling-locator" element={<RecyclingLocator />} />
-        <Route path="/Points" element={<Points />} />
         <Route path="/Leaderboard" element={<Leaderboard />} />
-        <Route path="/Gamification" element={<Gamification />} />
       </Routes>
     </Router>
     </ThemeProvider>

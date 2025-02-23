@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { getUserScore, updateUserScore, getLeaderboard } from "../services/pointsService";
+
 
 function RecyclingLocator() {
   useEffect(() => {

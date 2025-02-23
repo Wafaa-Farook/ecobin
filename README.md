@@ -16,14 +16,14 @@ Additionally, the Recycling Locator leverages OpenStreetMap integration to help 
 - [Contact](#contact)
 
 ## Features
-- **Waste Sorter:** Upload images of waste items, and let EcoBin’s AI-powered classifier automatically categorize them into recyclable, non-recyclable, and compostable categories. This helps you dispose of waste responsibly.It Supports various waste categories and provides suggestions for proper disposal methods.
+- **Waste Sorter:** Upload images of waste items, and let EcoBin’s AI-powered classifier automatically categorize them into recyclable, non-recyclable, organic and E-wastes. This helps you dispose of waste responsibly.It Supports various waste categories and provides suggestions for proper disposal methods.
 - **Carbon Footprint Calculator:** Estimate your daily carbon emissions based on your lifestyle habits. Simply input your data for transportation, energy use, waste production, and more.
 It calculates carbon footprint in kilograms of CO₂ equivalent (CO₂e) and visualizes your emissions with a pie chart.
 EcoBin provides tailored suggestions to reduce your carbon output.
 Categorizes your footprint level into:
-**Safe Level: Minimal environmental impact.
-**Moderate Level: Some adjustments recommended.
-**Unsafe Level: Consider significant changes.
+-**Safe Level: Minimal environmental impact.
+-**Moderate Level: Some adjustments recommended.
+-**Unsafe Level: Consider significant changes.
 - **Recycling Locator :** Find nearby recycling centers effortlessly using integrated map functionality powered by OpenStreetMap.
 - **Eco Tips:** Receive helpful, easy-to-implement tips for sustainable living.Daily eco-friendly habits and advice on reducing plastic, conserving water, and minimizing energy consumption.
 

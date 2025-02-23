@@ -1,5 +1,7 @@
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
 import * as tmImage from "@teachablemachine/image";
+import { getAuth } from "firebase/auth";
+import { getUserScore, updateUserScore, getLeaderboard } from "../services/pointsService";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -167,6 +169,14 @@ setGuidelines(data.guideline); // <-- Set guidelines from response
       )}
     </Container>
   );
+};
+const handleWasteSort = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    await updateUserScore(user.uid, 10); // Award 10 points for sorting waste
+  }
 };
 
 export default WasteSort;

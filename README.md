@@ -55,13 +55,17 @@ npm start
 Create a new Firebase project.
 Replace the Firebase configuration object in your firebase.js file with your project’s credentials.
 
-## environment
+## Environment
 
--Frontend: React.js, Material-UI (MUI)
--Backend: Node.js, Express.js
--Database: Firebase Realtime Database
--Machine Learning: TensorFlow.js for waste classification
--Mapping Service: OpenStreetMap API for locating recycling centers
+1. Frontend: React.js, Material-UI (MUI)
+
+2. Backend: Node.js, Express.js
+
+3. Database: Firebase Realtime Database
+
+4. Machine Learning: TensorFlow.js for waste classification
+
+5. Mapping Service: OpenStreetMap API for locating recycling centers
 
 ## Usage
 

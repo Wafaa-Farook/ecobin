@@ -84,14 +84,14 @@ Replace the Firebase configuration object in your firebase.js file with your pro
 - Go to the Waste Sorter section.
 - Upload an image of your waste item.
 - Get instant classification and disposal advice.
-- Carbon Footprint Calculator
 
-2. Navigate to the Calculator page.
+ 2. Carbon Footprint Calculator
+- Navigate to the Calculator page.
 - Enter values for your daily activities (e.g., distance traveled, electricity usage).
 - View your carbon footprint and get personalized suggestions.
-- Find Recycling Centers
 
-3.Access the Recycling Locator.
+3. Find Recycling Centers
+- Access the Recycling Locator.
 - Allow location access or input your city manually.
 - Get directions to the nearest recycling facility.
 

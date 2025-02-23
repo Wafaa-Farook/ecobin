@@ -1,7 +1,8 @@
-import { AppBar, Button, Card, CardContent, Container, Grid, Toolbar, Typography } from "@mui/material";
+import { AppBar, Button, CardContent, Container, Grid, Toolbar, Typography, Box } from "@mui/material";
 import { getAuth, signOut } from "firebase/auth";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import EcoTips from "./EcoTips"; // New component
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -62,37 +63,58 @@ const Dashboard = () => {
           Cleaner Choices for a Brighter Planet
         </Typography>
 
-        <Grid container spacing={4} justifyContent="center">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "20px", // Space between boxes
+            flexWrap: "nowrap", // Keep them in a single line
+            overflowX: "auto", // Allow horizontal scroll if needed
+            padding: "10px",
+          }}
+        >
           {[
             { title: "♻️ Upload & Sort Waste", description: "Use AI to classify waste items.", path: "/waste-sort" },
-            { title: "🌍 Carbon Calculator", description: "Estimate your carbon footprint.", path: "/carbon-calculator" },
+            { title: "🌍 Carbon Footprint Calculator", description: "Estimate your carbon footprint.", path: "/carbon-calculator" },
             { title: "📍 Recycling Centers", description: "Find nearby recycling centers.", path: "/recycling-locator" },
+            { title: "🌱 Eco Tips", description: "Learn simple ways to live sustainably!", path: "/eco-tips" },
           ].map((service, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card
-                sx={{
-                  background: "#fff",
-                  borderRadius: "15px",
-                  boxShadow: 4,
-                  textAlign: "center",
-                  padding: "20px",
-                }}
-              >
-                <CardContent>
-                  <Typography variant="h5" fontWeight="bold">
-                    {service.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ marginBottom: "10px" }}>
-                    {service.description}
-                  </Typography>
-                  <Button variant="contained" color="primary" fullWidth onClick={() => navigate(service.path)}>
-                    Explore
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
+            <Box
+              key={index}
+              onClick={() => navigate(service.path)}
+              sx={{
+                background: "#fff",
+                borderRadius: "15px",
+                boxShadow: "0 4px 15px rgba(46, 125, 50, 0.5)", // Green shadow
+                border: "2px solid #2E7D32", // Green border
+                textAlign: "center",
+                padding: "20px",
+                cursor: "pointer",
+                transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+                minWidth: "265cd px", // Fixed box width
+                maxWidth: "350px",
+                height: "200px", // Ensures same height
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center", // Center content vertically
+                alignItems: "center",
+                "&:hover": {
+                  transform: "scale(1.05)", // Slight pop effect on hover
+                  boxShadow: "0 8px 20px rgba(46, 125, 50, 0.8)", // Stronger green shadow on hover
+                },
+              }}
+            >
+              <CardContent>
+                <Typography variant="h5" fontWeight="bold">
+                  {service.title}
+                </Typography>
+                <Typography variant="body2" sx={{ marginBottom: "10px" }}>
+                  {service.description}
+                </Typography>
+              </CardContent>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Container>
 
       {/* Footer */}
@@ -102,5 +124,13 @@ const Dashboard = () => {
     </div>
   );
 };
+
+// Add the route for Eco Tips
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/dashboard" element={<Dashboard />} />
+    <Route path="/eco-tips" element={<EcoTips />} />
+  </Routes>
+);
 
 export default Dashboard;

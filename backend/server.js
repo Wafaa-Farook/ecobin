@@ -142,7 +142,40 @@ app.post("/api/predict", upload.single("image"), async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
+const ecoTips = [
+  "💡 Turn off lights and unplug devices when not in use.",
+  "🌱 Start composting your kitchen waste to reduce landfill.",
+  "🚴‍♂️ Use a bike or walk for short distances instead of driving.",
+  "👜 Carry reusable shopping bags and water bottles.",
+  "♻️ Separate your waste into recyclables and non-recyclables.",
+  "🚿 Take shorter showers to conserve water.",
+  "🌍 Use energy-efficient LED bulbs and appliances.",
+  "🧴 Refill and reuse containers to cut down on plastic waste.",
+  "📦 Choose products with minimal or eco-friendly packaging.",
+  "🌳 Plant a tree or maintain a small home garden.",
+  "📚 Donate old books, clothes, and electronics instead of trashing them.",
+  "🚌 Use public transportation or carpool to reduce carbon emissions.",
+  "🍽️ Avoid single-use plastic cutlery and straws.",
+  "🥗 Eat more plant-based meals to reduce your carbon footprint.",
+  "🧼 Use biodegradable and non-toxic cleaning products.",
+  "🌊 Avoid wasting water while brushing or washing dishes.",
+  "🛒 Support local farmers and buy seasonal produce.",
+  "☕ Bring your own reusable cup to coffee shops.",
+  "🔋 Switch to rechargeable batteries to reduce e-waste.",
+  "🌞 Make the most of natural sunlight instead of electric lighting.",
+  "📧 Go paperless by opting for digital receipts and statements.",
+  "🎁 Wrap gifts in reusable cloth or newspaper instead of plastic wrap.",
+  "👗 Upcycle or donate old clothes instead of throwing them away.",
+  "🌬️ Use fans and open windows instead of air conditioning when possible.",
+  "📱 Recycle old phones and gadgets through e-waste programs.",
+  "🍽️ Reduce food waste by planning your meals and storing food properly."
+];
 
+
+app.get("/api/eco-tip", (req, res) => {
+  const randomTip = ecoTips[Math.floor(Math.random() * ecoTips.length)];
+  res.json({ message: randomTip });
+});
 // Root route
 app.get("/", (req, res) => {
   res.send("Backend is running!");

@@ -23,7 +23,7 @@ const Dashboard = () => {
       {/* Navbar */}
       <AppBar position="static" sx={{ background: "linear-gradient(to right, #2F7A34FF, #388E3C)", padding: "10px 0" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h5" fontWeight="bold">EcoBin</Typography>
+          <Typography variant="h5" fontWeight="bold"></Typography>
           <Button color="secondary" variant="contained" sx={{ borderRadius: "20px" }} onClick={handleLogout}>
             Logout
           </Button>

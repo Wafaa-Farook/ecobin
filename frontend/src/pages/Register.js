@@ -69,7 +69,7 @@ function Register() {
         <Paper elevation={10} sx={{ padding: 4, borderRadius: 3, width: "350px" }}>
           <Container maxWidth="sm" style={{ textAlign: "center" }}>
             <Typography variant="h4" gutterBottom>
-              🌱 Register for EcoBin
+               Register
             </Typography>
 
             <Snackbar

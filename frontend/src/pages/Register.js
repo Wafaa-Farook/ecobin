@@ -1,55 +1,27 @@
 import { useState } from "react";
-import { signUpWithGoogle, signUpWithEmail } from "../firebase";
+import { signUpWithEmail } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Container, Typography, Snackbar, Divider } from "@mui/material";
+import { TextField, Button, Container, Typography, Snackbar } from "@mui/material";
 
 function Register() {
-  const [username, setUsername] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
 
-  const handleGoogleSignUp = async () => {
-    try {
-      const user = await signUpWithGoogle();
-      console.log("Google Signup User:", user); // Debug log to see if the user object is received
-  
-      if (user) {
-        setSnackbarMessage("✅ Google Signup successful! Redirecting to Dashboard...");
-        setOpenSnackbar(true);
-        setTimeout(() => navigate("/dashboard"), 2000); // Redirect only if user exists
-      } else {
-        setSnackbarMessage("❌ Google Signup failed! No user returned.");
-        setOpenSnackbar(true);
-      }
-    } catch (error) {
-      console.error("Google signup error:", error); // Full error log
-      if (error.code === "auth/popup-closed-by-user") {
-        setSnackbarMessage("❌ Google sign-in was canceled. Please try again.");
-      } else {
-        setSnackbarMessage(`❌ Google Signup failed! ${error.message}`);
-      }
-      setOpenSnackbar(true);
-    }
-  };
-  
-  
-  
   const handleSignUp = async () => {
     try {
-      await signUpWithEmail(email, password, username, phoneNumber);
+      await signUpWithEmail(email, password);
       setSnackbarMessage("✅ Registration successful! Redirecting to login...");
       setOpenSnackbar(true);
       setTimeout(() => navigate("/"), 2000);
     } catch (error) {
-      setSnackbarMessage(error.message);
+      console.error("Signup error:", error.message);
+      setSnackbarMessage(`❌ Signup failed: ${error.message}`);
       setOpenSnackbar(true);
     }
   };
-
 
   return (
     <Container maxWidth="sm" style={{ textAlign: "center", marginTop: "50px" }}>
@@ -62,20 +34,6 @@ function Register() {
         onClose={() => setOpenSnackbar(false)}
       />
 
-      <TextField
-        fullWidth
-        label="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="Phone Number"
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-        margin="normal"
-      />
       <TextField
         fullWidth
         label="Email"
@@ -95,12 +53,6 @@ function Register() {
 
       <Button fullWidth variant="contained" color="primary" onClick={handleSignUp} style={{ marginTop: "20px" }}>
         Register
-      </Button>
-
-      <Divider sx={{ my: 3 }}>OR</Divider>
-
-      <Button fullWidth variant="outlined" color="secondary" onClick={handleGoogleSignUp}>
-        🌐 Sign Up with Google
       </Button>
 
       <Typography variant="body2" style={{ marginTop: "20px" }}>

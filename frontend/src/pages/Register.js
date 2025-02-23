@@ -1,28 +1,28 @@
 import { useState } from "react";
-import { signUpWithEmail, signInWithGoogle } from "../firebase";
+import { TextField, Button, Container, Typography, Snackbar } from "@mui/material";
+import { signUpWithEmail } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Container, Typography } from "@mui/material";
 
 function Register() {
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
     try {
-      await signUpWithEmail(email, password);
-      navigate("/dashboard"); // Redirect after sign-up
-    } catch (error) {
-      alert("Sign-Up Failed: " + error.message);
-    }
-  };
+      await signUpWithEmail(email, password, fullName, phoneNumber, username);
+      setSnackbarMessage("Registration successful! Redirecting to login...");
+      setOpenSnackbar(true);
 
-  const handleGoogleSignUp = async () => {
-    try {
-      await signInWithGoogle();
-      navigate("/dashboard"); // Redirect after Google sign-up
+      setTimeout(() => navigate("/"), 2000);
     } catch (error) {
-      alert("Google Sign-Up Failed: " + error.message);
+      setSnackbarMessage(error.message);
+      setOpenSnackbar(true);
     }
   };
 
@@ -30,34 +30,22 @@ function Register() {
     <Container maxWidth="sm" style={{ textAlign: "center", marginTop: "50px" }}>
       <Typography variant="h4">Register</Typography>
 
-      <TextField
-        fullWidth
-        margin="normal"
-        label="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        message={snackbarMessage}
+        onClose={() => setOpenSnackbar(false)}
       />
-      <TextField
-        fullWidth
-        margin="normal"
-        label="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+
+      <TextField fullWidth label="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+      <TextField fullWidth label="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+      <TextField fullWidth label="Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+      <TextField fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <TextField fullWidth label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
       <Button fullWidth variant="contained" color="primary" onClick={handleSignUp}>
         Register
       </Button>
-
-      <Button fullWidth variant="contained" color="secondary" onClick={handleGoogleSignUp} style={{ marginTop: "10px" }}>
-        Sign up with Google
-      </Button>
-
-      <Typography variant="body2" style={{ marginTop: "10px" }}>
-        Already have an account? <a href="/login">Login here</a>
-      </Typography>
     </Container>
   );
 }

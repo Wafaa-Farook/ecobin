@@ -21,9 +21,9 @@ Additionally, the Recycling Locator leverages OpenStreetMap integration to help 
 It calculates carbon footprint in kilograms of CO₂ equivalent (CO₂e) and visualizes your emissions with a pie chart.
 EcoBin provides tailored suggestions to reduce your carbon output.
 Categorizes your footprint level into:
-   -Safe Level: Minimal environmental impact.
-   -Moderate Level: Some adjustments recommended.
-   -Unsafe Level: Consider significant changes.
+    1. Safe Level: Minimal environmental impact.
+    2. Moderate Level: Some adjustments recommended.
+    3. Unsafe Level: Consider significant changes.
 - **Recycling Locator :** Find nearby recycling centers effortlessly using integrated map functionality powered by OpenStreetMap.
 - **Eco Tips:** Receive helpful, easy-to-implement tips for sustainable living.Daily eco-friendly habits and advice on reducing plastic, conserving water, and minimizing energy consumption.
 

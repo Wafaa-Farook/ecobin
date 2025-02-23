@@ -81,7 +81,7 @@ Replace the Firebase configuration object in your firebase.js file with your pro
 ## Usage
 
 1. Upload & Sort Waste
-- **Go to the Waste Sorter section.
+- Go to the Waste Sorter section.
 - **Upload an image of your waste item.
 - **Get instant classification and disposal advice.
 - **Carbon Footprint Calculator

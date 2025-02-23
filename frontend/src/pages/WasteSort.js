@@ -4,17 +4,20 @@ import { getAuth } from "firebase/auth";
 import { getUserScore, updateUserScore, getLeaderboard } from "../services/pointsService";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Webcam from "react-webcam";
 
 const WasteSort = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const webcamRef = useRef(null);
   const [model, setModel] = useState(null);
   const [prediction, setPrediction] = useState("");
-  const [guidelines, setGuidelines] = useState(""); // <-- Add guidelines state
+  const [guidelines, setGuidelines] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingPrediction, setLoadingPrediction] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState(null);
+  const [useWebcam, setUseWebcam] = useState(false);
 
   const modelURL = "http://localhost:5000/model/model.json";
   const metadataURL = "http://localhost:5000/model/metadata.json";
@@ -38,36 +41,48 @@ const WasteSort = () => {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
+    processImage(file);
+  };
+
+  const captureImage = async () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    if (imageSrc) {
+      setImagePreview(imageSrc);
+      processImage(imageSrc, true);
+    }
+  };
+
+  const processImage = async (image, isBase64 = false) => {
     setPrediction("");
     setGuidelines("");
-
     setError(null);
     setLoadingPrediction(true);
+    
     const formData = new FormData();
-    formData.append("image", file);
+    if (isBase64) {
+      const blob = await fetch(image).then((res) => res.blob());
+      formData.append("image", blob);
+    } else {
+      formData.append("image", image);
+    }
 
     try {
       const response = await fetch("http://localhost:5000/api/predict", {
         method: "POST",
         body: formData,
       });
-
+      
       const data = await response.json();
-      console.log("📦 Backend response:", data); 
       setLoadingPrediction(false);
 
       if (data.success) {
-        setImagePreview(URL.createObjectURL(file));
         setPrediction(data.prediction);
         setGuidelines(data.guideline);
-        console.log("📝 Setting guidelines:", data.guideline);
-setGuidelines(data.guideline); // <-- Set guidelines from response
       } else {
         setError("Prediction failed. Please try again.");
       }
     } catch (error) {
       setLoadingPrediction(false);
-      console.error("❌ Error uploading file:", error);
       setError("Failed to upload or predict the image. Please try again.");
     }
   };
@@ -76,37 +91,56 @@ setGuidelines(data.guideline); // <-- Set guidelines from response
     <Container style={{ textAlign: "center", marginTop: "50px" }}>
       <Typography variant="h4">🗑️ Waste Sorting AI</Typography>
       <Typography style={{ marginBottom: "20px" }}>
-        Upload an image of waste and get sorting advice.
+        Upload or capture an image of waste to get sorting advice.
       </Typography>
 
       {loading ? (
         <CircularProgress />
       ) : (
         <>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
+          <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "20px" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => fileInputRef.current.click()}
+            >
+              Upload Image
+            </Button>
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => fileInputRef.current.click()}
-            style={{ marginRight: "10px" }}
-          >
-            Upload Waste Image
-          </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => setUseWebcam(!useWebcam)}
+            >
+              {useWebcam ? "Use File Upload" : "Use Webcam"}
+            </Button>
+          </div>
 
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => navigate("/dashboard")}
-          >
-            Back to Dashboard
-          </Button>
+          {useWebcam ? (
+            <>
+              <Webcam
+                ref={webcamRef}
+                screenshotFormat="image/png"
+                style={{ width: "100%", maxWidth: "400px", borderRadius: "10px" }}
+              />
+              <Button
+                variant="contained"
+                color="success"
+                style={{ marginTop: "10px" }}
+                onClick={captureImage}
+              >
+                Capture Image
+              </Button>
+            </>
+          ) : (
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+          )}
 
           {loadingPrediction && <CircularProgress style={{ marginTop: "20px" }} />}
 
@@ -121,62 +155,33 @@ setGuidelines(data.guideline); // <-- Set guidelines from response
           )}
 
           {prediction && (
-            <Typography
-              variant="h6"
-              style={{
-                marginTop: "20px",
-                color: "#4CAF50",
-                fontWeight: "bold",
-              }}
-            >
+            <Typography variant="h6" style={{ marginTop: "20px", color: "#4CAF50", fontWeight: "bold" }}>
               Predicted Category: {prediction}
             </Typography>
           )}
 
-{guidelines ? (
-  <Typography
-    variant="body1"
-    style={{
-      marginTop: "20px",
-      backgroundColor: "#f0f4f8",
-      padding: "15px",
-      borderRadius: "10px",
-      textAlign: "left",
-      whiteSpace: "pre-line",
-    }}
-  >
-    {guidelines}
-  </Typography>
-) : prediction && (
-  <Typography
-    variant="body1"
-    style={{
-      marginTop: "20px",
-      color: "#FF5722", // Just for visibility, you can change this
-    }}
-  >
-    ⚠️ No guidelines available for this category.
-  </Typography>
-)}
+          {guidelines ? (
+            <Typography
+              variant="body1"
+              style={{ marginTop: "20px", backgroundColor: "#f0f4f8", padding: "15px", borderRadius: "10px", textAlign: "left", whiteSpace: "pre-line" }}
+            >
+              {guidelines}
+            </Typography>
+          ) : prediction && (
+            <Typography variant="body1" style={{ marginTop: "20px", color: "#FF5722" }}>
+              ⚠️ No guidelines available for this category.
+            </Typography>
+          )}
 
-{error && (
-  <Typography color="error" style={{ marginTop: "20px" }}>
-    {error}
-  </Typography>
-)}
-
+          {error && (
+            <Typography color="error" style={{ marginTop: "20px" }}>
+              {error}
+            </Typography>
+          )}
         </>
       )}
     </Container>
   );
-};
-const handleWasteSort = async () => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-
-  if (user) {
-    await updateUserScore(user.uid, 10); // Award 10 points for sorting waste
-  }
 };
 
 export default WasteSort;

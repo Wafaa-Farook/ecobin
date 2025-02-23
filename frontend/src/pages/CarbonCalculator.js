@@ -60,7 +60,10 @@ const CarbonCalculator = () => {
     };
 
     addEmission("transportKm", 0.12);
-    addEmission("PublicTransport",0.07);
+    addEmission("PublicTransport",0.07);console.log("Inputs:", inputs);
+console.log("Score:", score);
+console.log("Level:", level);
+console.log("Chart Data:", chartData);
     addEmission("electricityKwh", 0.5);
     addEmission("electricityHours", 0.2);
     addEmission("gasUsage", 2.3);

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { getUserScore, updateUserScore, getLeaderboard } from "../services/pointsService";
-
 import {
   Button,
   Container,
@@ -23,6 +21,7 @@ const CarbonCalculator = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     transportKm: "",
+    publicTransportKm: "",
     electricityKwh: "",
     electricityHours: "",
     gasUsage: "",
@@ -43,7 +42,23 @@ const CarbonCalculator = () => {
   const [level, setLevel] = useState("");
   const [chartData, setChartData] = useState([]);
 
-  const COLORS = ["#66bb6a", "#ffa726", "#ff4d4d", "#42a5f5", "#8e44ad", "#f39c12", "#d35400", "#c0392b", "#2ecc71", "#3498db", "#9b59b6", "#e74c3c", "#1abc9c", "#7f8c8d", "#34495e"];
+  const COLORS = [
+    "#66bb6a",
+    "#ffa726",
+    "#ff4d4d",
+    "#42a5f5",
+    "#8e44ad",
+    "#f39c12",
+    "#d35400",
+    "#c0392b",
+    "#2ecc71",
+    "#3498db",
+    "#9b59b6",
+    "#e74c3c",
+    "#1abc9c",
+    "#7f8c8d",
+    "#34495e",
+  ];
 
   const handleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -56,14 +71,14 @@ const CarbonCalculator = () => {
     const addEmission = (key, multiplier) => {
       const value = parseFloat(inputs[key] || 0) * multiplier;
       total += value;
-      categories.push({ name: key.replace(/([A-Z])/g, " $1"), value });
+      categories.push({
+        name: key.replace(/([A-Z])/g, " $1"),
+        value,
+      });
     };
 
     addEmission("transportKm", 0.12);
-    addEmission("PublicTransport",0.07);console.log("Inputs:", inputs);
-console.log("Score:", score);
-console.log("Level:", level);
-console.log("Chart Data:", chartData);
+    addEmission("publicTransportKm", 0.07);
     addEmission("electricityKwh", 0.5);
     addEmission("electricityHours", 0.2);
     addEmission("gasUsage", 2.3);
@@ -82,8 +97,8 @@ console.log("Chart Data:", chartData);
     setScore(total.toFixed(2));
     setChartData(categories);
 
-    if (total < 50) setLevel("Safe Level");
-    else if (total < 150) setLevel("Moderate Level");
+    if (total < 10) setLevel("Safe Level");
+    else if (total < 20) setLevel("Moderate Level");
     else setLevel("Unsafe Level");
   };
 
@@ -104,21 +119,25 @@ console.log("Chart Data:", chartData);
         Enter your daily activities to estimate your carbon footprint.
       </Typography>
 
-      <Grid container spacing={2} style={{ marginTop: "20px" }}>
-        {Object.keys(inputs).map((key) => (
-          <Grid item xs={12} sm={6} key={key}>
-            <TextField
-              label={key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}
-              name={key}
-              type="number"
-              value={inputs[key]}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-        ))}
-      </Grid>
+      <Grid container direction="column" spacing={2} style={{ marginTop: "20px" }}>
+  {Object.keys(inputs).map((key) => (
+    <Grid item key={key}>
+      <Typography variant="subtitle1" style={{ marginBottom: "5px" }}>
+        {key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}
+      </Typography>
+      <TextField
+        name={key}
+        type="number"
+        value={inputs[key]}
+        onChange={handleChange}
+        size="small" // Makes the input box smaller
+        style={{ width: "50%" }} // Reduces width to 50%
+      />
+    </Grid>
+  ))}
+</Grid>
 
+      {/* Calculate Button */}
       <Button
         variant="contained"
         color="primary"
@@ -128,6 +147,7 @@ console.log("Chart Data:", chartData);
         Calculate
       </Button>
 
+      {/* Result Display */}
       {score && (
         <Paper style={{ padding: "20px", marginTop: "20px" }}>
           <Typography variant="h6">
@@ -135,6 +155,8 @@ console.log("Chart Data:", chartData);
           </Typography>
           <Typography variant="subtitle1">📊 Level: {level}</Typography>
           <Typography>{renderSuggestions()}</Typography>
+
+          {/* Pie Chart */}
           <ResponsiveContainer width="100%" height={400}>
             <PieChart>
               <Pie
@@ -147,7 +169,10 @@ console.log("Chart Data:", chartData);
                 label
               >
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -157,6 +182,7 @@ console.log("Chart Data:", chartData);
         </Paper>
       )}
 
+      {/* Back to Dashboard Button */}
       <Button
         variant="contained"
         color="secondary"
@@ -170,4 +196,3 @@ console.log("Chart Data:", chartData);
 };
 
 export default CarbonCalculator;
-

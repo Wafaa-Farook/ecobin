@@ -34,25 +34,35 @@ Categorizes your footprint level into:
 2. git clone https://github.com/anshidarinshii/ecobin.git
 ```bash
 cd ecobin
+```
 
 3. Install Dependencies
  Run the following commands in the project directory:
 ```bash
 npm install
+```
 
-6. Backend Setup
+4. Backend Setup
  Navigate to the backend folder:
+```bash
 cd backend
 npm install
+```
+```bash
 node server.js
+```
 
-7. Frontend Setup
+5. Frontend Setup
 In a new terminal window:
+```bash
 cd frontend
+```
+```bash
 npm install
 npm start
+```
 
-7.Firebase Configuration
+6.Firebase Configuration
 Create a new Firebase project.
 Replace the Firebase configuration object in your firebase.js file with your project’s credentials.
 
@@ -71,22 +81,22 @@ Replace the Firebase configuration object in your firebase.js file with your pro
 ## Usage
 
 1. Upload & Sort Waste
--Go to the Waste Sorter section.
--Upload an image of your waste item.
--Get instant classification and disposal advice.
--Carbon Footprint Calculator
+- **Go to the Waste Sorter section.
+- **Upload an image of your waste item.
+- **Get instant classification and disposal advice.
+- **Carbon Footprint Calculator
 
 2. Navigate to the Calculator page.
--Enter values for your daily activities (e.g., distance traveled, electricity usage).
--View your carbon footprint and get personalized suggestions.
--Find Recycling Centers
+- **Enter values for your daily activities (e.g., distance traveled, electricity usage).
+- **View your carbon footprint and get personalized suggestions.
+- **Find Recycling Centers
 
 3.Access the Recycling Locator.
--Allow location access or input your city manually.
--Get directions to the nearest recycling facility.
+- **Allow location access or input your city manually.
+- **Get directions to the nearest recycling facility.
 
 4.Read Eco Tips
--Check out the Eco Tips section for daily green living advice.
+- **Check out the Eco Tips section for daily green living advice.
 
 ## Contributing
 

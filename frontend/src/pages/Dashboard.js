@@ -1,32 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { AppBar, Toolbar, Typography, Button, Container, Grid, Card, CardContent } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { AppBar, Button, Card, CardContent, Container, Grid, Toolbar, Typography } from "@mui/material";
 import { getAuth, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase"; // Ensure Firebase is configured
-import { getUserScore, updateUserScore, getLeaderboard } from "../services/pointsService";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const auth = getAuth();
-  const user = auth.currentUser;
-  const [score, setScore] = useState(0);
-
-  // Fetch user score from Firestore
-  useEffect(() => {
-    const fetchUserScore = async () => {
-      if (user) {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (userSnap.exists()) {
-          setScore(userSnap.data().score);
-        }
-      }
-    };
-
-    fetchUserScore();
-  }, [user]);
 
   // Logout function
   const handleLogout = async () => {
@@ -44,18 +23,9 @@ const Dashboard = () => {
       <AppBar position="static" sx={{ background: "linear-gradient(to right, #2F7A34FF, #388E3C)", padding: "10px 0" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Typography variant="h5" fontWeight="bold">EcoBin</Typography>
-          <div>
-            <Typography variant="h6" display="inline" sx={{ marginRight: "20px" }}>
-              Score: {score} {/* Display actual user score */}
-            </Typography>
-            <Button color="secondary" variant="contained" sx={{ borderRadius: "20px", marginRight: "10px" }} 
-              onClick={() => navigate("/leaderboard")}>
-              Leaderboard
-            </Button>
-            <Button color="secondary" variant="contained" sx={{ borderRadius: "20px" }} onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
+          <Button color="secondary" variant="contained" sx={{ borderRadius: "20px" }} onClick={handleLogout}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
 

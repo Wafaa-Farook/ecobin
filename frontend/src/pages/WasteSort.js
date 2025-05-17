@@ -39,41 +39,40 @@ const WasteSort = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleUpload = async () => {
-    if (!image) {
-      setError("⚠️ No image to upload. Please select an image.");
-      return;
+const handleUpload = async () => {
+  if (!image) {
+    setError("⚠ No image to upload. Please select an image.");
+    return;
+  }
+
+  setPrediction("");
+  setGuidelines("");
+  setError(null);
+  setLoadingPrediction(true);
+
+  const formData = new FormData();
+  formData.append("image", image);
+
+  try {
+    const response = await fetch("https://ecobin-m1pl.onrender.com/api/predict", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+    setLoadingPrediction(false);
+
+    if (data.success) {
+      setPrediction(data.prediction);
+      setGuidelines(data.guideline);
+    } else {
+      setError("Prediction failed. Please try again.");
     }
-
-    setPrediction("");
-    setGuidelines("");
-    setError(null);
-    setLoadingPrediction(true);
-
-    const formData = new FormData();
-    formData.append("image", image);
-
-    try {
-      const response = await fetch("http://localhost:5000/api/predict", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-      setLoadingPrediction(false);
-
-      if (data.success) {
-        setPrediction(data.prediction);
-        setGuidelines(data.guideline);
-      } else {
-        setError("Prediction failed. Please try again.");
-      }
-    } catch (error) {
-      setLoadingPrediction(false);
-      setError("Failed to upload or predict the image. Please try again.");
-    }
-  };
-
+  } catch (error) {
+    setLoadingPrediction(false);
+    setError("Failed to upload or predict the image. Please try again.");
+  }
+};
   return (
     <Container
       style={{

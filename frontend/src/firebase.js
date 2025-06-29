@@ -10,13 +10,14 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 // 🔹 Replace this with your actual Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyBNfRXgqf603JARhiFBDNvKtpN4GNmTq88",
-  authDomain: "ecobin-40c34.firebaseapp.com",
-  projectId: "ecobin-40c34",
-  storageBucket: "ecobin-40c34.appspot.com",
-  messagingSenderId: "215367277242",
-  appId: "1:215367277242:web:8a76c01fc7b1a9a4b2c083",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

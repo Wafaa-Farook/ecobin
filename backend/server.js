@@ -121,7 +121,7 @@ app.post("/api/predict", upload.single("image"), async (req, res) => {
 
     try {
       const imageBuffer = fs.readFileSync(path.join(__dirname, "uploads", req.file.filename));
-      const imageTensor = tf.node.decodeImage(imageBuffer)
+      const imageTensor = tf.node.decodeImage(imageBuffer, 3)  // 3 = force RGB
         .resizeNearestNeighbor([224, 224])
         .expandDims(0)
         .toFloat()

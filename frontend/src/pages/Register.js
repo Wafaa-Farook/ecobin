@@ -15,7 +15,7 @@ function Register() {
     setLoading(true);
     try {
       await signUpWithEmail(email, password);
-      setSnackbarMessage("✅ Registration successful! Redirecting to login...");
+      setSnackbarMessage("✅Registration successful! Redirecting to login...");
       setOpenSnackbar(true);
 
       setTimeout(() => {

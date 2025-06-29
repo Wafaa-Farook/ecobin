@@ -119,32 +119,46 @@ app.post("/api/predict", upload.single("image"), async (req, res) => {
     const imagePath = `/uploads/${req.file.filename}`;
     console.log("🖼️ Image uploaded:", imagePath);
 
-    const imageBuffer = fs.readFileSync(path.join(__dirname, "uploads", req.file.filename));
-    const imageTensor = tf.node.decodeImage(imageBuffer)
-      .resizeNearestNeighbor([224, 224])
-      .expandDims(0)
-      .toFloat()
-      .div(tf.scalar(255));
+    try {
+      const imageBuffer = fs.readFileSync(path.join(__dirname, "uploads", req.file.filename));
+      const imageTensor = tf.node.decodeImage(imageBuffer)
+        .resizeNearestNeighbor([224, 224])
+        .expandDims(0)
+        .toFloat()
+        .div(tf.scalar(255));
 
-    const predictions = await model.predict(imageTensor).array();
-    const highestPredictionIndex = predictions[0].indexOf(Math.max(...predictions[0]));
-    const className = classLabels[highestPredictionIndex] || "Unknown";
-    const probability = predictions[0][highestPredictionIndex];
+      const predictions = await model.predict(imageTensor).array();
+      const highestPredictionIndex = predictions[0].indexOf(Math.max(...predictions[0]));
+      const className = classLabels[highestPredictionIndex] || "Unknown";
 
-    const prediction = `${className} (${(probability * 100).toFixed(2)}%)`;
-    const guideline = guidelines[className] || "No guidelines available for this category.";
+      // ✅ Skip E-Waste if it's causing trouble
+      if (className === "E-Waste") {
+        return res.json({
+          success: false,
+          message: "E-Waste category is currently unsupported due to model issues.",
+        });
+      }
 
-    res.json({
-      success: true,
-      imagePath,
-      prediction,
-      guideline, // Sending the correct guideline!
-    });
+      const probability = predictions[0][highestPredictionIndex];
+      const prediction = `${className} (${(probability * 100).toFixed(2)}%)`;
+      const guideline = guidelines[className] || "No guidelines available for this category.";
+
+      res.json({
+        success: true,
+        imagePath,
+        prediction,
+        guideline,
+      });
+    } catch (predictionError) {
+      console.error("❌ Prediction error:", predictionError);
+      res.status(500).json({ success: false, message: "Prediction process failed. Check image or model." });
+    }
   } catch (error) {
-    console.error("❌ Error in prediction:", error);
+    console.error("❌ General error in /api/predict:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
+
 const ecoTips = [
   "💡 Turn off lights and unplug devices when not in use.",
   "🌱 Start composting your kitchen waste to reduce landfill.",

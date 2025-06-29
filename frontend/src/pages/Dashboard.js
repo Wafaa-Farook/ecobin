@@ -66,13 +66,14 @@ const Dashboard = () => {
         <Box
           sx={{
             display: "flex",
+            flexWrap: "wrap", // allow stacking
             justifyContent: "center",
-            gap: "20px", // Space between boxes
-            flexWrap: "nowrap", // Keep them in a single line
-            overflowX: "auto", // Allow horizontal scroll if needed
+            gap: "20px",
             padding: "10px",
           }}
         >
+
+        
           {[
             { title: "♻️ Upload & Sort Waste", description: "Use AI to classify waste items.", path: "/waste-sort" },
             { title: "🌍 Carbon Footprint Calculator", description: "Estimate your carbon footprint.", path: "/carbon-calculator" },
@@ -80,30 +81,32 @@ const Dashboard = () => {
             { title: "🌱 Eco Tips", description: "Learn simple ways to live sustainably!", path: "/eco-tips" },
           ].map((service, index) => (
             <Box
-              key={index}
-              onClick={() => navigate(service.path)}
-              sx={{
-                background: "#fff",
-                borderRadius: "15px",
-                boxShadow: "0 4px 15px rgba(46, 125, 50, 0.5)", // Green shadow
-                border: "2px solid #2E7D32", // Green border
-                textAlign: "center",
-                padding: "20px",
-                cursor: "pointer",
-                transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-                minWidth: "265cdpx", // Fixed box width
-                maxWidth: "350px",
-                height: "200px", // Ensures same height
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center", // Center content vertically
-                alignItems: "center",
-                "&:hover": {
-                  transform: "scale(1.05)", // Slight pop effect on hover
-                  boxShadow: "0 8px 20px rgba(46, 125, 50, 0.8)", // Stronger green shadow on hover
-                },
-              }}
-            >
+                key={index}
+                onClick={() => navigate(service.path)}
+                sx={{
+                  background: "#fff",
+                  borderRadius: "15px",
+                  boxShadow: "0 4px 15px rgba(46, 125, 50, 0.5)",
+                  border: "2px solid #2E7D32",
+                  textAlign: "center",
+                  padding: "20px",
+                  cursor: "pointer",
+                  transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+                  minWidth: "250px",
+                  maxWidth: "300px",
+                  flex: "1 1 250px", // allow responsive wrap
+                  height: "200px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow: "0 8px 20px rgba(46, 125, 50, 0.8)",
+                  },
+                }}
+              >
+
               <CardContent>
                 <Typography variant="h5" fontWeight="bold">
                   {service.title}
